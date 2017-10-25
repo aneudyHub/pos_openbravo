@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="azul700">#1976D2</color>
+    <color name="azul500">#2196F3</color>
+
+    <!-- Paleta #2 -->
+    <color name="rosa500">#EC407A</color>
+
+    <!-- Opacidad texto, iconos y divisores -->
+
+    <!-- A light Holo shade of green -->
+    <!-- A light Holo shade of red -->
+    <!-- A dark Holo shade of blue -->
+    <!-- A dark Holo shade of green -->
+    <!-- A dark Holo shade of red -->
+    <!-- A Holo shade of purple -->
+    <!-- A light Holo shade of orange -->
+    <!-- A dark Holo shade of orange -->
+    <color name="holo_orange_dark">#ffff8800</color>
+    <!-- A really bright Holo shade of blue -->
+    <!-- A really bright Holo shade of gray -->
+
+    <color name="bg_register">#2e3237</color>
+</resources>
