@@ -157,7 +157,8 @@ public class Operations extends AppCompatActivity {
                         progress.dismiss();
                         if(response.isSuccessful()){
                             Receipt receipt = response.body();
-                            //Log.e("recipt",response.body().getId());
+
+                            //Log.e("recipt",response.body().getCashier());
                             //Log.e("detail",response.body().getDetails().get(0).getNAME());
                             if(response.body().getPayMethod().equalsIgnoreCase("debtpaid")){
                                 receipt.setPending(balance);
