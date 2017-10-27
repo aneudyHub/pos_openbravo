@@ -247,7 +247,7 @@ public class Zebraprint {
 
                     // RPP300 is the name of the bluetooth printer device
                     // we got this name from the list of paired devices
-                    if (device.getName().equals("mz320")) {
+                    if (device.getName().equals("jhos15")) {
                         mmDevice = device;
                         printerConnection = new BluetoothConnection(mmDevice.getAddress());
                         break;
