@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ZSDK_ANDROID_API/ZSDK_ANDROID_API.iml" filepath="$PROJECT_DIR$/ZSDK_ANDROID_API/ZSDK_ANDROID_API.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/juan.iml" filepath="$PROJECT_DIR$/juan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pos_openbravo.iml" filepath="$PROJECT_DIR$/pos_openbravo.iml" />
     </modules>
   </component>
 </project>

@@ -51,7 +51,7 @@ public class DetalleProductos extends RecyclerView.Adapter<DetalleProductos.Deta
         holder.CodeItem.setText(items.get(position).getCODE());
         holder.NameItem.setText(items.get(position).getNAME());
         holder.CantItem.setText(String.valueOf(items.get(position).getCantidad()));
-        Double f = (Double.parseDouble(items.get(position).getPRICESELL()) * items.get(position).getCantidad());
+        Double f = (Double.parseDouble(items.get(position).getPRICESELL()));
         holder.PriceItem.setText(String.valueOf(f));
         holder.BtnDelete.setOnClickListener(new View.OnClickListener() {
             @Override

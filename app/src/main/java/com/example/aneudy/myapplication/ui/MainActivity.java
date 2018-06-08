@@ -59,10 +59,13 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MainActivity extends AppCompatActivity
         implements AlertBuilder.NoticeDialogListener {
@@ -75,6 +78,8 @@ public class MainActivity extends AppCompatActivity
     private Product selectedProduct;
     AlertDialog.Builder payment_alert;
     ProgressDialog server_prog;
+
+    private ArrayList<Product> mProducts;
 
     AlertDialog PAY_alertDialog;
 
@@ -126,6 +131,47 @@ public class MainActivity extends AppCompatActivity
             }
             else {
                 Toast.makeText(this, result.getContents(),Toast.LENGTH_LONG).show();
+
+                for (Product p :mProducts){
+                    if(p.getCODE().equalsIgnoreCase(result.getContents())){
+                        int Cantidad=1;
+
+                        int count=0;
+                        if (Cantidad > 0) {
+
+                            for (int x = 0; x < mainAdp.items.size(); x++) {
+                                if (mainAdp.items.get(x).getID() == p.getID()) {
+                                    count++;
+                                }
+                            }
+
+                            if (count == 0) {
+                                p.setCantidad(Cantidad);
+                                mainAdp.items.add(p);
+                                DetallesFact.setAdapter(mainAdp);
+                                mainAdp.notifyDataSetChanged();
+
+                            } else {
+                                //showAlert("Este Materiale ya existe....")
+                                // ;
+
+                                for (int x = 0; x < mainAdp.items.size(); x++) {
+                                    if (mainAdp.items.get(x).getID() == p.getID()) {
+                                        mainAdp.items.get(x).setCantidad(mainAdp.items.get(x).getCantidad() + Cantidad);
+                                        DetallesFact.setAdapter(mainAdp);
+                                        mainAdp.notifyDataSetChanged();
+                                    }
+                                }
+                            }
+                        }
+
+                        mainAdp.update();
+
+                        SearchItem.setText("");
+                        CantidadProducto.setText("");
+                        SearchItem.requestFocus();
+                    }
+                }
             }
         }
         else {
@@ -147,6 +193,7 @@ public class MainActivity extends AppCompatActivity
         //Monto =(TextView)findViewById(R.id.MontoF);
         //Tax =(TextView)findViewById(R.id.TaxF);
         MontoGeneral =(TextView)findViewById(R.id.MontoGeneral);
+        mProducts = new ArrayList<>();
 
 
 
@@ -155,7 +202,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                 integrator.setPrompt("Scan");
                 integrator.setCameraId(0);
                 integrator.setBeepEnabled(false);
@@ -277,6 +324,7 @@ public class MainActivity extends AppCompatActivity
                             }
 
                             final SearchItem_Adapter searchItem_adapter= new SearchItem_Adapter(getApplicationContext(),R.layout.autocomplete_search,response.body().getProducts());
+                            mProducts = response.body().getProducts();
                             SearchItem.setAdapter(searchItem_adapter);
                             Log.e("adp","ok");
                             SearchItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -284,6 +332,7 @@ public class MainActivity extends AppCompatActivity
                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                     Log.e("position",String.valueOf(id));
                                     selectedProduct = searchItem_adapter.getItem(position);
+
                                     Log.e("name",selectedProduct.getID());
                                     CantidadProducto.setText("1");
                                 }
