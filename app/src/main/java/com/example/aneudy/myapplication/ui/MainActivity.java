@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,11 +18,8 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,13 +45,11 @@ import com.example.aneudy.myapplication.AlertBuilder;
 import com.example.aneudy.myapplication.Insertar;
 import com.example.aneudy.myapplication.Models.Receipt;
 import com.example.aneudy.myapplication.NET.ApiClient;
-import com.example.aneudy.myapplication.NET.ApiInterface;
 import com.example.aneudy.myapplication.Product;
 import com.example.aneudy.myapplication.ProductosResponse;
 import com.example.aneudy.myapplication.R;
 import com.example.aneudy.myapplication.ResponseMSJ;
-import com.example.aneudy.myapplication.Utils.Resolve;
-import com.example.aneudy.myapplication.Utils.Zebraprint;
+import com.example.aneudy.myapplication.Printer.Zebraprint;
 import com.example.aneudy.myapplication.provider.Configs;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -68,8 +61,6 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.app.Activity.RESULT_OK;
 
 public class MainActivity extends AppCompatActivity
         implements AlertBuilder.NoticeDialogListener {

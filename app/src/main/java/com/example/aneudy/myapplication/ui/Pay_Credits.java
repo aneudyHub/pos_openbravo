@@ -2,14 +2,10 @@ package com.example.aneudy.myapplication.ui;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,19 +16,19 @@ import android.widget.TextView;
 import com.example.aneudy.myapplication.Insertar;
 import com.example.aneudy.myapplication.Models.Receipt;
 import com.example.aneudy.myapplication.NET.ApiClient;
+import com.example.aneudy.myapplication.Printer.Progress;
 import com.example.aneudy.myapplication.R;
 import com.example.aneudy.myapplication.ResponseMSJ;
-import com.example.aneudy.myapplication.Utils.Zebraprint;
+import com.example.aneudy.myapplication.Printer.Zebraprint;
 import com.example.aneudy.myapplication.provider.Configs;
 
 import java.io.IOException;
-import java.nio.DoubleBuffer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Pay_Credits extends AppCompatActivity {
+public class Pay_Credits extends AppCompatActivity implements Progress {
 
     public TextView Balance;
     public EditText Amount;
@@ -45,6 +41,7 @@ public class Pay_Credits extends AppCompatActivity {
     AlertDialog.Builder payment_alert;
     private String PaymentMode;
     AlertDialog PAY_alertDialog;
+    ProgressDialog mPrinterProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +68,14 @@ public class Pay_Credits extends AppCompatActivity {
 
 
                 Double t= Double.parseDouble(Amount.getText().toString());
+
+                if(t==0){
+                    showAlert("THE AMOUNT COULD NOT BE ZERO");
+                    return;
+                }
+
                 if(t>BALANCE){
-                    showAlert("THE AMOUNT COULD NOT BE MAJOR THAT BALANCE");
+                    showAlert("THE AMOUNT COULD NOT BE HIGHER THAN THE BALANCE");
                     return;
                 }
 
@@ -86,6 +89,9 @@ public class Pay_Credits extends AppCompatActivity {
                 finish();
             }
         });
+
+        mPrinterProgress = new ProgressDialog(this);
+        mPrinterProgress.setTitle("Printing...");
     }
 
     public void show_payment(){
@@ -175,7 +181,7 @@ public class Pay_Credits extends AppCompatActivity {
                             Receipt receipt = new Receipt(response.body().getReceipt(),Double.parseDouble(Amount.getText().toString()),CLIENT,Configs.USER,response.body().getDate(),i.getTipopago(),t);
 
 
-                            Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,receipt,Zebraprint.TAG_PAGO);
+                            Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,receipt,Zebraprint.TAG_PAGO,Pay_Credits.this);
                             zebraprint.probarlo();
                             //setResult(RESULT_OK);
                             //finish();
@@ -204,5 +210,29 @@ public class Pay_Credits extends AppCompatActivity {
         progress.setTitle(title);
         progress.setCancelable(false);
         progress.show();
+    }
+
+    @Override
+    public void showProgressPrint(Boolean b) {
+        if(b){
+            mPrinterProgress.show();
+        }else{
+            mPrinterProgress.dismiss();
+        }
+    }
+
+    @Override
+    public void error(String msj) {
+        if(mPrinterProgress!=null)
+            mPrinterProgress.dismiss();
+
+        Log.e("error printer",msj);
+        showAlert(msj);
+    }
+
+    @Override
+    public void finishPrint() {
+        setResult(RESULT_OK);
+        finish();
     }
 }

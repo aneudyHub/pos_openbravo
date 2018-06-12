@@ -16,7 +16,7 @@ import com.example.aneudy.myapplication.Models.Receipt;
 import com.example.aneudy.myapplication.NET.ApiClient;
 import com.example.aneudy.myapplication.R;
 import com.example.aneudy.myapplication.Utils.Memory;
-import com.example.aneudy.myapplication.Utils.Zebraprint;
+import com.example.aneudy.myapplication.Printer.Zebraprint;
 
 import java.io.IOException;
 

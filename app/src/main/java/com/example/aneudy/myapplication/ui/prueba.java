@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.aneudy.myapplication.R;
-import com.example.aneudy.myapplication.Utils.Zebraprint;
 
 public class prueba extends AppCompatActivity {
 
