@@ -138,9 +138,9 @@ public class Operations extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1){
             if(resultCode == RESULT_OK){
-                ID =data.getExtras().getString("ID");
-                Client_Name = data.getExtras().getString("NAME");
-                Client_Tax = data.getExtras().getString("TAX");
+                ID =Memory.client.getId();
+                Client_Name = Memory.client.getName();
+                Client_Tax = Memory.client.getTAID();
                 prepare_view();
             }
         }
@@ -197,6 +197,10 @@ public class Operations extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<BalanceResponse> call, Response<BalanceResponse> response) {
                         if(response.isSuccessful()){
+                            if(response.body().getBalance()==null){
+                                response.body().setBalance(0.0);
+                            }
+
                             Balance.setText(response.body().getBalance().toString());
                             balance=response.body().getBalance();
                         }else{

@@ -22,6 +22,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -217,6 +220,26 @@ public class MainActivity extends AppCompatActivity
         mainAdp = new DetalleProductos(getApplicationContext(),R.layout.lista_materiales);
 
         CantidadProducto =(EditText)findViewById(R.id.Cantidad);
+        CantidadProducto.setInputType(InputType.TYPE_CLASS_NUMBER);
+        CantidadProducto.setText("0");
+
+//        CantidadProducto.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                String s = CantidadProducto.getText().toString().equalsIgnoreCase("")?"0":CantidadProducto.getText().toString();
+//                CantidadProducto.setText(s);
+//            }
+//        });
 
         DetallesFact =(RecyclerView) findViewById(R.id.DetalleR);
         LinearLayoutManager layoutManager
@@ -230,6 +253,9 @@ public class MainActivity extends AppCompatActivity
         BtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(selectedProduct==null)
+                    return;
 
                 int Cantidad=Integer.parseInt(CantidadProducto.getText().toString());
 
@@ -267,6 +293,7 @@ public class MainActivity extends AppCompatActivity
                 SearchItem.setText("");
                 CantidadProducto.setText("");
                 SearchItem.requestFocus();
+                selectedProduct=null;
 
                 Log.e("agregar","ok");
 
@@ -589,6 +616,11 @@ public class MainActivity extends AppCompatActivity
                             receipt.setClient(Client_Name);
                             Zebraprint zebraprint = new Zebraprint(MainActivity.this,receipt,Zebraprint.TAG_IMPRESION);
                             zebraprint.probarlo();
+//                            getIntent().putExtra("ID",ClienteID);
+//                            getIntent().putExtra("NAME",Client_Name);
+//                            getIntent().putExtra("TAX",Client_Tax);
+//                            setResult(RESULT_OK);
+//                            finish();
                             ///finish();
 
                         }else{
