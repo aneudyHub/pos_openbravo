@@ -2,6 +2,8 @@ package com.example.aneudy.myapplication.ui;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -165,12 +167,18 @@ public class Pay_Credits extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<ResponseMSJ> call, Response<ResponseMSJ> response) {
                         progress.dismiss();
+                        PAY_alertDialog.dismiss();
                         if(response.isSuccessful()){
+
 
                             Double t = BALANCE + i.getTotal();
                             Receipt receipt = new Receipt(response.body().getReceipt(),Double.parseDouble(Amount.getText().toString()),CLIENT,Configs.USER,response.body().getDate(),i.getTipopago(),t);
+
+
                             Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,receipt,Zebraprint.TAG_PAGO);
                             zebraprint.probarlo();
+                            //setResult(RESULT_OK);
+                            //finish();
                         }else{
                             try {
 

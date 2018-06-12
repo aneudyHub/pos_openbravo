@@ -149,9 +149,13 @@ public class Clients extends AppCompatActivity {
         mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                clients_adapter.clientsList= new ArrayList<com.example.aneudy.myapplication.Clients>();
-                clients_adapter.notifyDataSetChanged();
-                return true;
+                if(clients_adapter!=null){
+                    clients_adapter.clientsList= new ArrayList<com.example.aneudy.myapplication.Clients>();
+                    clients_adapter.notifyDataSetChanged();
+                }
+
+                mSearchView.clearFocus();
+                return false;
             }
         });
 

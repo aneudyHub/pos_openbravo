@@ -66,6 +66,8 @@ public class Operations extends AppCompatActivity {
 
 
     }
+
+
     public void showAlert(String mensaje){
         progress.dismiss();
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -144,6 +146,10 @@ public class Operations extends AppCompatActivity {
                 prepare_view();
             }
         }
+
+        if(requestCode==200 && resultCode== RESULT_OK){
+
+        }
     }
 
     private void reprint_receipt(){
@@ -188,6 +194,8 @@ public class Operations extends AppCompatActivity {
                 });
     }
 
+
+
     private void load_balance(){
         showProgress("Loading data");
         ApiClient
@@ -197,9 +205,11 @@ public class Operations extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<BalanceResponse> call, Response<BalanceResponse> response) {
                         if(response.isSuccessful()){
-                            if(response.body().getBalance()==null){
+                            /*if(response.body().getBalance()==null){
                                 response.body().setBalance(0.0);
-                            }
+                            }*/
+
+                            Log.e("BALANCE=>>",String.valueOf(response.body().getBalance()));
 
                             Balance.setText(response.body().getBalance().toString());
                             balance=response.body().getBalance();

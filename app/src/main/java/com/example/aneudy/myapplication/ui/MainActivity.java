@@ -55,6 +55,7 @@ import com.example.aneudy.myapplication.Product;
 import com.example.aneudy.myapplication.ProductosResponse;
 import com.example.aneudy.myapplication.R;
 import com.example.aneudy.myapplication.ResponseMSJ;
+import com.example.aneudy.myapplication.Utils.Resolve;
 import com.example.aneudy.myapplication.Utils.Zebraprint;
 import com.example.aneudy.myapplication.provider.Configs;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -221,7 +222,7 @@ public class MainActivity extends AppCompatActivity
 
         CantidadProducto =(EditText)findViewById(R.id.Cantidad);
         CantidadProducto.setInputType(InputType.TYPE_CLASS_NUMBER);
-        CantidadProducto.setText("0");
+        //CantidadProducto.setText("0");
 
 //        CantidadProducto.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -257,7 +258,12 @@ public class MainActivity extends AppCompatActivity
                 if(selectedProduct==null)
                     return;
 
-                int Cantidad=Integer.parseInt(CantidadProducto.getText().toString());
+                int Cantidad=0;
+
+                if(!CantidadProducto.getText().toString().isEmpty()){
+                    Cantidad=Integer.parseInt(CantidadProducto.getText().toString());
+                }
+
 
                 int count=0;
                 if (Cantidad > 0) {
@@ -286,6 +292,9 @@ public class MainActivity extends AppCompatActivity
                                 }
                             }
                         }
+                }else{
+                    showAlert("QUANTITY SHOULD BE HIGHIER THAN 0");
+                    return;
                 }
 
                 mainAdp.update();
@@ -426,7 +435,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void showAlert(String mensaje){
-        server_prog.dismiss();
+        if(server_prog!=null)
+            server_prog.dismiss();
+
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(mensaje);
 
