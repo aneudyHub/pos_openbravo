@@ -93,17 +93,6 @@ public class Zebraprint {
                     //mListener.showProgressPrint(false);
                     mListener.error("ERROR CONECTION TO PRINTER");
                     Log.e("CONECT ERROR","error conection");
-//                    if(_context instanceof MainActivity){
-//                        ((MainActivity)_context).showAlert("ERROR CONECTION TO PRINTER");
-//                    }
-//
-//                    if(_context instanceof Operations){
-//                        ((Operations)_context).showAlert("ERROR CONECTION TO PRINTER");
-//                    }
-
-//                    if(_context instanceof Pay_Credits){
-//                        ((Pay_Credits)_context).showAlert("ERROR CONECTION TO PRINTER");
-//                    }
                     e.printStackTrace();
                 }
 
@@ -193,7 +182,7 @@ public class Zebraprint {
             //((MainActivity)this._context).showAlert("FAILD, CONECTING TO PRINTER");
             setStatus("Comm Error! Disconnecting", Color.RED);
             mListener.error("FAILD CONECTION TO PRINTER");
-            sleep(1000);
+            //sleep(1000);
             disconnect();
         }
 
@@ -208,29 +197,16 @@ public class Zebraprint {
             } catch (ConnectionException e) {
                 //setStatus("Unknown Printer Language", Color.RED);
                 printer = null;
-                sleep(1000);
+                //sleep(1000);
                 disconnect();
             } catch (ZebraPrinterLanguageUnknownException e) {
-                //setStatus("Unknown Printer Language", Color.RED);
-                //((MainActivity)this._context).showAlert("UNKNOW PRINTER LANGUAGE");
                 mListener.error("UNKNOW PRINTER LANGUAGE");
                 printer = null;
-                sleep(1000);
+                //sleep(1000);
                 disconnect();
             }
         }else{
             mListener.error("ERROR CONECTION TO PRINTER");
-//            if(this._context instanceof MainActivity){
-//                ((MainActivity)this._context).showAlert("ERROR CONECTION TO PRINTER");
-//            }
-//
-//            if(this._context instanceof Operations){
-//                ((Operations)this._context).showAlert("ERROR CONECTION TO PRINTER");
-//            }
-//
-//            if(this._context instanceof Pay_Credits){
-//                ((Pay_Credits)this._context).showAlert("ERROR CONECTION TO PRINTER");
-//            }
         }
 
         return printer;
@@ -259,18 +235,6 @@ public class Zebraprint {
             });
             DemoSleeper.sleep(1000);*/
     }
-
-        /*private String getMacAddressFieldText() {
-            return macAddress.getText().toString();
-        }
-
-        private String getTcpAddress() {
-            return ipDNSAddress.getText().toString();
-        }
-
-        private String getTcpPortNumber() {
-            return portNumber.getText().toString();
-        }*/
 
     private void doConnectionTest(String opcion) throws InterruptedException {
         printer = connect();
@@ -311,11 +275,11 @@ public class Zebraprint {
 
             setStatus("Sending Data", Color.BLUE);
 
-            sleep(1500);
+            //sleep(1500);
             if (printerConnection instanceof BluetoothConnection) {
                 String friendlyName = ((BluetoothConnection) printerConnection).getFriendlyName();
                 setStatus(friendlyName, Color.MAGENTA);
-                sleep(500);
+//                sleep(500);
             }
 //            if(this._context instanceof MainActivity)
 //                ((MainActivity)this._context).finish();
@@ -327,7 +291,7 @@ public class Zebraprint {
 
         } catch (ConnectionException e) {
             //((MainActivity)this._context).showAlert("ERROR PRINTER");
-            mListener.error("FAILD PRINTING THE RECIEPT");
+            //mListener.error("FAILD PRINTING THE RECIEPT");
             setStatus(e.getMessage(), Color.RED);
         } finally {
             disconnect();

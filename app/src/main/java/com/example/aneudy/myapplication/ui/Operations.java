@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.aneudy.myapplication.Models.BalanceResponse;
 import com.example.aneudy.myapplication.Models.Receipt;
 import com.example.aneudy.myapplication.NET.ApiClient;
+import com.example.aneudy.myapplication.Printer.Progress;
 import com.example.aneudy.myapplication.R;
 import com.example.aneudy.myapplication.Utils.Memory;
 import com.example.aneudy.myapplication.Printer.Zebraprint;
@@ -24,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Operations extends AppCompatActivity {
+public class Operations extends AppCompatActivity implements Progress{
 
     private String ID;
     private String Client_Name;
@@ -36,6 +37,7 @@ public class Operations extends AppCompatActivity {
     public Button Reprint;
     public Button Shop;
     public Double balance;
+    ProgressDialog mPrinterProgress;
 
     public ProgressDialog progress;
 
@@ -85,6 +87,10 @@ public class Operations extends AppCompatActivity {
     }
 
     private void prepare_view(){
+        getSupportActionBar().setTitle(Memory.client.getName());
+        mPrinterProgress = new ProgressDialog(this);
+        mPrinterProgress.setTitle("Printing...");
+        mPrinterProgress.setCancelable(false);
         Name = (TextView)findViewById(R.id.Operations_ClientName);
         Name.setText(Client_Name);
         TaxID = (TextView)findViewById(R.id.Operations_ClientTaxID);
@@ -169,10 +175,10 @@ public class Operations extends AppCompatActivity {
                             if(response.body().getPayMethod().equalsIgnoreCase("debtpaid")){
                                 receipt.setPending(balance);
                                 receipt.setTotal(receipt.getTotal() * -1);
-                                Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_PAGO_REIMPRESION);
+                                Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_PAGO_REIMPRESION,Operations.this);
                                 zebraprint.probarlo();
                             }else{
-                                Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_REIMPRESION);
+                                Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_REIMPRESION,Operations.this);
                                 zebraprint.probarlo();
                             }
 
@@ -231,5 +237,28 @@ public class Operations extends AppCompatActivity {
                         progress.dismiss();
                     }
                 });
+    }
+
+    @Override
+    public void showProgressPrint(Boolean b) {
+        if(b){
+            mPrinterProgress.show();
+        }else{
+            mPrinterProgress.dismiss();
+        }
+    }
+
+    @Override
+    public void error(String msj) {
+        if(mPrinterProgress!=null)
+            mPrinterProgress.dismiss();
+
+        Log.e("error printer",msj);
+        showAlert(msj);
+    }
+
+    @Override
+    public void finishPrint() {
+        mPrinterProgress.dismiss();
     }
 }

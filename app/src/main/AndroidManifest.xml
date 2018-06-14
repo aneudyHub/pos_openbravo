@@ -60,6 +60,7 @@
 
         <activity
             android:name=".ui.Clients"
+            android:label="Search for Clients"
             android:screenOrientation="portrait">
 
         </activity>

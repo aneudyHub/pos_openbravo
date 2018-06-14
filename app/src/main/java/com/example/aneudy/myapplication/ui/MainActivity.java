@@ -45,6 +45,7 @@ import com.example.aneudy.myapplication.AlertBuilder;
 import com.example.aneudy.myapplication.Insertar;
 import com.example.aneudy.myapplication.Models.Receipt;
 import com.example.aneudy.myapplication.NET.ApiClient;
+import com.example.aneudy.myapplication.Printer.Progress;
 import com.example.aneudy.myapplication.Product;
 import com.example.aneudy.myapplication.ProductosResponse;
 import com.example.aneudy.myapplication.R;
@@ -63,7 +64,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements AlertBuilder.NoticeDialogListener {
+        implements AlertBuilder.NoticeDialogListener,Progress {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     //private AdaptadorTarea adaptador;
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Product> mProducts;
 
     AlertDialog PAY_alertDialog;
+
+    ProgressDialog mPrinterProgress;
 
     ListView listView;
 
@@ -181,6 +184,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_content);
+
+        mPrinterProgress = new ProgressDialog(this);
+        mPrinterProgress.setTitle("Printing...");
+        mPrinterProgress.setCancelable(false);
+
+        getSupportActionBar().setTitle("Shop");
 
         ClienteID=getIntent().getExtras().getString("ID");
         Client_Name=getIntent().getExtras().getString("NAME");
@@ -617,7 +626,7 @@ public class MainActivity extends AppCompatActivity
                             //String id, List<Product> details, Double subTotal, Double total, String client, String cashier
                             Receipt receipt= new Receipt(response.body().getReceipt(),mainAdp.items,i.getTotal(),i.getTotal(),0.00,"",Configs.USER,response.body().getDate(),i.getTipopago(),Client_Name);
                             receipt.setClient(Client_Name);
-                            Zebraprint zebraprint = new Zebraprint(MainActivity.this,receipt,Zebraprint.TAG_IMPRESION);
+                            Zebraprint zebraprint = new Zebraprint(MainActivity.this,receipt,Zebraprint.TAG_IMPRESION,MainActivity.this);
                             zebraprint.probarlo();
 //                            getIntent().putExtra("ID",ClienteID);
 //                            getIntent().putExtra("NAME",Client_Name);
@@ -665,67 +674,28 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    class TareaAnadirContacto extends AsyncTask<Uri, Void, Void> {
-        private final ContentResolver resolver;
-        private final ContentValues valores;
-
-        public TareaAnadirContacto(ContentResolver resolver, ContentValues valores) {
-            this.resolver = resolver;
-            this.valores = valores;
+    @Override
+    public void showProgressPrint(Boolean b) {
+        if(b){
+            mPrinterProgress.show();
+        }else{
+            mPrinterProgress.dismiss();
         }
+    }
 
-        ProgressDialog pd;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(MainActivity.this);
-            pd.setMessage("loading");
-            pd.show();
-        }
+    @Override
+    public void error(String msj) {
+        if(mPrinterProgress!=null)
+            mPrinterProgress.dismiss();
 
+        Log.e("error printer",msj);
+        showAlert(msj);
+    }
 
-
-
-
-        @Override
-        protected Void doInBackground(Uri... args) {
-//            Uri uri = args[0];
-//            if (null != uri) {
-//                /*
-//                Verificación: Si el contacto que se va a actualizar aún no ha sido sincronizado,
-//                es decir su columna 'insertado' = 1, entonces la columna 'modificado' no debe ser
-//                alterada
-//                 */
-//                Cursor c = resolver.query(uri, new String[]{Contrato.Tareas.INSERTADO}, null, null, null);
-//                if (c != null && c.moveToNext()) {
-//                    // Verificación de sincronización
-//                    if (UConsultas.obtenerInt(c, Tareas.INSERTADO) == 0) {
-//                        valores.put(Tareas.MODIFICADO, 1);
-//                    }
-//                    valores.put(Tareas.FECHA_CIERRE, UTiempo.obtenerFecha());
-//                    valores.put(Tareas.HORA_FIN, UTiempo.obtenerHora());
-//                    valores.put(Tareas.OBSERVACION, Observacion);
-//                    resolver.update(uri, valores, null, null);
-//                }
-//
-//            } else {
-//                resolver.insert(Tareas.URI_CONTENIDO, valores);
-//            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            if (pd != null)
-            {
-                pd.dismiss();
-                //sincronizar();
-                finish();
-
-            }
-        }
-
+    @Override
+    public void finishPrint() {
+        setResult(RESULT_OK);
+        finish();
     }
 
 

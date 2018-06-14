@@ -162,6 +162,11 @@ public class Clients extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
+
     private void preFind(){
         Error_Layout.setVisibility(View.GONE);
         Notfound_Layout.setVisibility(View.GONE);

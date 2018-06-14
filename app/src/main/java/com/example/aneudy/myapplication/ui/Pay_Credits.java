@@ -92,6 +92,7 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
 
         mPrinterProgress = new ProgressDialog(this);
         mPrinterProgress.setTitle("Printing...");
+        mPrinterProgress.setCancelable(false);
     }
 
     public void show_payment(){
