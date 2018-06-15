@@ -364,8 +364,6 @@ public class Zebraprint {
                     Final_Linea+
                     ">>SubTotal: $"+receipt.getSubTotal()+
                     Final_Linea+
-                    ">>Taxes: $"+receipt.getTaxes()+
-                    Final_Linea+
                     ">>Total: $"+receipt.getTotal()+
                     Final_Linea+
                     Final_Linea+
@@ -421,8 +419,6 @@ public class Zebraprint {
                     "Items Count: "+receipt.getItemsCount()+
                     Final_Linea+
                     ">>SubTotal: $"+receipt.getSubTotal()+
-                    Final_Linea+
-                    ">>Taxes: $"+receipt.getTaxes()+
                     Final_Linea+
                     ">>Total: $"+receipt.getTotal()+
                     Final_Linea+
