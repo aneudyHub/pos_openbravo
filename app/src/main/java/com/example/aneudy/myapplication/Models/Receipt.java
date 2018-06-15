@@ -39,6 +39,19 @@ public class Receipt {
     @Expose
     private String payMethod;
 
+    public int getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(int ticketType) {
+        this.ticketType = ticketType;
+    }
+
+    @SerializedName("TICKETTYPE")
+    @Expose
+    private int ticketType;
+
+
     private Double Pending;
 
 

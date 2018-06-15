@@ -172,7 +172,18 @@ public class Operations extends AppCompatActivity implements Progress{
 
                             //Log.e("recipt",response.body().getCashier());
                             //Log.e("detail",response.body().getDetails().get(0).getNAME());
-                            if(response.body().getPayMethod().equalsIgnoreCase("debtpaid")){
+//                            if(response.body().getPayMethod().equalsIgnoreCase("debtpaid")){
+//                                receipt.setPending(balance);
+//                                receipt.setTotal(receipt.getTotal() * -1);
+//                                Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_PAGO_REIMPRESION,Operations.this);
+//                                zebraprint.probarlo();
+//                            }else{
+//                                Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_REIMPRESION,Operations.this);
+//                                zebraprint.probarlo();
+//                            }
+
+                            //impresion de compra
+                            if(response.body().getTicketType()!=0){
                                 receipt.setPending(balance);
                                 receipt.setTotal(receipt.getTotal() * -1);
                                 Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_PAGO_REIMPRESION,Operations.this);
