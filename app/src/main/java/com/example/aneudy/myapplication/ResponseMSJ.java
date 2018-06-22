@@ -21,7 +21,73 @@ public class ResponseMSJ {
     private String date;
 
 
+    @SerializedName("name")
+    @Expose
+    private String name;
+    @SerializedName("address")
+    @Expose
+    private String address;
+    @SerializedName("phone")
+    @Expose
+    private String phone;
+    @SerializedName("fax")
+    @Expose
+    private String fax;
+    @SerializedName("description")
+    @Expose
+    private String description;
 
+    @SerializedName("footer")
+    @Expose
+    private String footer;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFooter() {
+        return footer;
+    }
+
+    public void setFooter(String footer) {
+        this.footer = footer;
+    }
 
     /**
      * No args constructor for use in serialization

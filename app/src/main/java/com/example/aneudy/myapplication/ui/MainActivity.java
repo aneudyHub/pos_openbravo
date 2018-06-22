@@ -584,14 +584,14 @@ public class MainActivity extends AppCompatActivity
 
                     String xml="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\"><properties><comment>Openbravo POS</comment><entry key=\"product.taxcategoryid\">"+mainAdp.items.get(x).getTAXCAT()+"</entry><entry key=\"product.com\">false</entry><entry key=\"product.categoryid\">"+mainAdp.items.get(x).getCATEGORY()+"</entry><entry key=\"product.name\">"+mainAdp.items.get(x).getNAME()+"</entry></properties>";
 
-                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,-"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"')";
+                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"')";
                     total+=Double.parseDouble(mainAdp.items.get(x).getPRICESELL())*mainAdp.items.get(x).getCantidad();
                 }else {
                     //cadena+="(@,"+x+",'"+MainStrMateriales.get(x).getID()+"',null,"+MainStrMateriales.get(x).getCantidad()+","+MainStrMateriales.get(x).getPRICESELL()+","+MainStrMateriales.get(x).getTAXCAT()+","+xml+"),";
 
                     String xml="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\"><properties><comment>Openbravo POS</comment><entry key=\"product.taxcategoryid\">"+mainAdp.items.get(x).getTAXCAT()+"</entry><entry key=\"product.com\">false</entry><entry key=\"product.categoryid\">"+mainAdp.items.get(x).getCATEGORY()+"</entry><entry key=\"product.name\">"+mainAdp.items.get(x).getNAME()+"</entry></properties>";
 
-                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,-"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"'),";
+                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"'),";
                     total+=Double.parseDouble(mainAdp.items.get(x).getPRICESELL())*mainAdp.items.get(x).getCantidad();
                 }
             }
@@ -628,6 +628,12 @@ public class MainActivity extends AppCompatActivity
                             //String id, List<Product> details, Double subTotal, Double total, String client, String cashier
                             mReceipt= new Receipt(response.body().getReceipt(),mainAdp.items,i.getTotal(),i.getTotal(),0.00,"",Configs.USER,response.body().getDate(),i.getTipopago(),Client_Name);
                             mReceipt.setClient(Client_Name);
+                            mReceipt.setName(response.body().getName());
+                            mReceipt.setDescription(response.body().getDescription());
+                            mReceipt.setAddress(response.body().getAddress());
+                            mReceipt.setPhone(response.body().getPhone());
+                            mReceipt.setFax(response.body().getFax());
+                            mReceipt.setFooter(response.body().getFooter());
                             Zebraprint zebraprint = new Zebraprint(MainActivity.this,mReceipt,Zebraprint.TAG_IMPRESION,MainActivity.this);
                             zebraprint.probarlo();
 //                            getIntent().putExtra("ID",ClienteID);
@@ -687,8 +693,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void error(final String msj) {
-        if(mPrinterProgress!=null)
-            mPrinterProgress.dismiss();
+
 
         runOnUiThread(new Runnable() {
 
@@ -720,6 +725,10 @@ public class MainActivity extends AppCompatActivity
 
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
+
+                Log.e("LEGO=>>>>>>>>>>>>>>>","OK");
+                if(mPrinterProgress!=null)
+                    mPrinterProgress.dismiss();
 
             }
         });

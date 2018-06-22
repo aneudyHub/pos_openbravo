@@ -122,6 +122,8 @@ public class Receipt {
 
     private Double Pending;
 
+    public Receipt(){}
+
 
     public Receipt(String id, Double total, String client, String cashier, String date, String payMethod, Double pending) {
         this.id = id;

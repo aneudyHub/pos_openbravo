@@ -179,10 +179,17 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
                         if(response.isSuccessful()){
 
 
+
+
                             Double t = BALANCE + i.getTotal();
 
                             mReceipt = new Receipt(response.body().getReceipt(),Double.parseDouble(Amount.getText().toString()),CLIENT,Configs.USER,response.body().getDate(),i.getTipopago(),t);
-
+                            mReceipt.setName(response.body().getName());
+                            mReceipt.setDescription(response.body().getDescription());
+                            mReceipt.setAddress(response.body().getAddress());
+                            mReceipt.setPhone(response.body().getPhone());
+                            mReceipt.setFax(response.body().getFax());
+                            mReceipt.setFooter(response.body().getFooter());
 
                             Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,mReceipt,Zebraprint.TAG_PAGO,Pay_Credits.this);
                             zebraprint.probarlo();

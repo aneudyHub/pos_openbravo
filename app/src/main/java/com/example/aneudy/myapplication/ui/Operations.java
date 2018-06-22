@@ -185,7 +185,7 @@ public class Operations extends AppCompatActivity implements Progress{
                             //impresion de compra
                             if(response.body().getTicketType()!=0){
                                 receipt.setPending(balance);
-                                receipt.setTotal(receipt.getTotal() * -1);
+                                receipt.setTotal(receipt.getTotal());
                                 Zebraprint zebraprint = new Zebraprint(Operations.this,receipt,Zebraprint.TAG_PAGO_REIMPRESION,Operations.this);
                                 zebraprint.probarlo();
                             }else{
@@ -261,11 +261,13 @@ public class Operations extends AppCompatActivity implements Progress{
 
     @Override
     public void error(String msj) {
-        if(mPrinterProgress!=null)
-            mPrinterProgress.dismiss();
+
 
         Log.e("error printer",msj);
         showAlert(msj);
+
+        if(mPrinterProgress!=null)
+            mPrinterProgress.dismiss();
     }
 
     @Override
