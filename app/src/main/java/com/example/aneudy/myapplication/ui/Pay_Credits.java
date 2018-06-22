@@ -41,6 +41,7 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
     AlertDialog.Builder payment_alert;
     private String PaymentMode;
     AlertDialog PAY_alertDialog;
+    Receipt mReceipt;
     ProgressDialog mPrinterProgress;
 
     @Override
@@ -103,9 +104,9 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
         payment_alert.setTitle("Payment Options");
         payment_alert.setView(mView);
         payment_alert.setCancelable(true);
-        CardView Cheque = (CardView) mView.findViewById(R.id.Payments_Check);
-        CardView Cash = (CardView) mView.findViewById(R.id.Payments_Cash);
-        CardView Credit = (CardView) mView.findViewById(R.id.Payments_Credit);
+        Button Cheque = (Button) mView.findViewById(R.id.Payments_Check);
+        Button Cash = (Button) mView.findViewById(R.id.Payments_Cash);
+        Button Credit = (Button) mView.findViewById(R.id.Payments_Credit);
         Credit.setVisibility(View.GONE);
 
 
@@ -146,7 +147,7 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(mensaje);
 
-        alertDialogBuilder.setPositiveButton("salir", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
 
@@ -179,10 +180,11 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
 
 
                             Double t = BALANCE + i.getTotal();
-                            Receipt receipt = new Receipt(response.body().getReceipt(),Double.parseDouble(Amount.getText().toString()),CLIENT,Configs.USER,response.body().getDate(),i.getTipopago(),t);
+
+                            mReceipt = new Receipt(response.body().getReceipt(),Double.parseDouble(Amount.getText().toString()),CLIENT,Configs.USER,response.body().getDate(),i.getTipopago(),t);
 
 
-                            Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,receipt,Zebraprint.TAG_PAGO,Pay_Credits.this);
+                            Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,mReceipt,Zebraprint.TAG_PAGO,Pay_Credits.this);
                             zebraprint.probarlo();
                             //setResult(RESULT_OK);
                             //finish();
@@ -223,12 +225,45 @@ public class Pay_Credits extends AppCompatActivity implements Progress {
     }
 
     @Override
-    public void error(String msj) {
+    public void error(final String msj) {
         if(mPrinterProgress!=null)
             mPrinterProgress.dismiss();
 
-        Log.e("error printer",msj);
-        showAlert(msj);
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                // Stuff that updates the UI
+                Log.e("error printer",msj);
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Pay_Credits.this);
+                alertDialogBuilder.setCancelable(false);
+                alertDialogBuilder.setMessage(msj);
+
+                alertDialogBuilder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Zebraprint zebraprint = new Zebraprint(Pay_Credits.this,mReceipt,Zebraprint.TAG_PAGO,Pay_Credits.this);
+                        zebraprint.probarlo();
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+            }
+        });
+
+
     }
 
     @Override

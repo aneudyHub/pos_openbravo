@@ -169,7 +169,7 @@ public class Zebraprint {
 //                ((Pay_Credits)this._context).showAlert("ERROR CONECTION TO PRINTER");
 //            }
 
-            mListener.error("ERROR CONECTION TO PRINTER");
+            mListener.error("ERROR CONECTION TO PRINTER ");
 
             return null;
         }
@@ -206,7 +206,7 @@ public class Zebraprint {
                 disconnect();
             }
         }else{
-            mListener.error("ERROR CONECTION TO PRINTER");
+            //mListener.error("ERROR CONECTION TO PRINTER 6");
         }
 
         return printer;
@@ -336,10 +336,10 @@ public class Zebraprint {
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro(Configs.COMPANY_NAME, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_SLOGAN, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_ADDRESS, caracteres_X_linea) + Final_Linea +
-                    Resolve.dos_columna("Tel: 929-244-7821", caracteres_X_linea, "Fax: 866-920-9064") + Final_Linea +
+                    Resolve.alinea_centro(receipt.getName(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getDescription(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getAddress(), caracteres_X_linea) + Final_Linea +
+                    Resolve.dos_columna("Tel: "+receipt.getPhone(), caracteres_X_linea, "Fax: "+receipt.getFax()) + Final_Linea +
                     Final_Linea+
                     "-----COPY"+
                     Final_Linea+
@@ -367,9 +367,9 @@ public class Zebraprint {
                     ">>Total: $"+receipt.getTotal()+
                     Final_Linea+
                     Final_Linea+
-                    "Cashier: "+receipt.getCashier()+
+                    "Delivered by: "+receipt.getCashier()+
                     Final_Linea+
-                    "Thank you for your visit."+
+                    receipt.getFooter()+
                     Final_Linea+Final_Linea;
 
 
@@ -392,10 +392,10 @@ public class Zebraprint {
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro(Configs.COMPANY_NAME, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_SLOGAN, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_ADDRESS, caracteres_X_linea) + Final_Linea +
-                    Resolve.dos_columna("Tel: 929-244-7821", caracteres_X_linea, "Fax: 866-920-9064") + Final_Linea +
+                    Resolve.alinea_centro(receipt.getName(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getDescription(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getAddress(), caracteres_X_linea) + Final_Linea +
+                    Resolve.dos_columna("Tel: "+receipt.getPhone(), caracteres_X_linea, "Fax: "+receipt.getFax()) + Final_Linea +
                     Final_Linea+
                     "-----ORIGINAL"+
                     Final_Linea+
@@ -423,9 +423,9 @@ public class Zebraprint {
                     ">>Total: $"+receipt.getTotal()+
                     Final_Linea+
                     Final_Linea+
-                    "Cashier: "+receipt.getCashier()+
+                    "Delivered by: "+receipt.getCashier()+
                     Final_Linea+
-                    "Thanks for choice Rainbow LandFlowers"+
+                    receipt.getFooter()+
                     Final_Linea+Final_Linea;
 
 
@@ -448,10 +448,10 @@ public class Zebraprint {
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro(Configs.COMPANY_NAME, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_SLOGAN, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_ADDRESS, caracteres_X_linea) + Final_Linea +
-                    Resolve.dos_columna("Tel: 929-244-7821", caracteres_X_linea, "Fax: 866-920-9064") + Final_Linea +
+                    Resolve.alinea_centro(receipt.getName(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getDescription(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getAddress(), caracteres_X_linea) + Final_Linea +
+                    Resolve.dos_columna("Tel: "+receipt.getPhone(), caracteres_X_linea, "Fax: "+receipt.getFax()) + Final_Linea +
                     Final_Linea+
                     "-----ORIGINAL"+
                     Final_Linea+
@@ -469,9 +469,9 @@ public class Zebraprint {
                     Final_Linea+
                     receipt.getPayMethod()+
                     Final_Linea+
-                    "Cashier: "+receipt.getCashier()+
+                    "Delivered by: "+receipt.getCashier()+
                     Final_Linea+
-                    "Thanks for choice Rainbow LandFlowers"+
+                    receipt.getFooter()+
                     Final_Linea+Final_Linea;
 
 
@@ -494,10 +494,10 @@ public class Zebraprint {
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro(Configs.COMPANY_NAME, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_SLOGAN, caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(Configs.COMPANY_ADDRESS, caracteres_X_linea) + Final_Linea +
-                    Resolve.dos_columna("Tel: 929-244-7821", caracteres_X_linea, "Fax: 866-920-9064") + Final_Linea +
+                    Resolve.alinea_centro(receipt.getName(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getDescription(), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(receipt.getAddress(), caracteres_X_linea) + Final_Linea +
+                    Resolve.dos_columna("Tel: "+receipt.getPhone(), caracteres_X_linea, "Fax: "+receipt.getFax()) + Final_Linea +
                     Final_Linea+
                     "-----COPY"+
                     Final_Linea+
@@ -515,9 +515,9 @@ public class Zebraprint {
                     Final_Linea+
                     receipt.getPayMethod()+
                     Final_Linea+
-                    "Cashier: "+receipt.getCashier()+
+                    "Delivered by: "+receipt.getCashier()+
                     Final_Linea+
-                    "Thanks for choice Rainbow LandFlowers"+
+                    receipt.getFooter()+
                     Final_Linea+Final_Linea;
 
 

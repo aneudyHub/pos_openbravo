@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 
 import android.widget.AutoCompleteTextView;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     private Product selectedProduct;
     AlertDialog.Builder payment_alert;
     ProgressDialog server_prog;
+    Receipt mReceipt;
 
     private ArrayList<Product> mProducts;
 
@@ -498,9 +500,9 @@ public class MainActivity extends AppCompatActivity
                     payment_alert.setTitle("Payment Options");
                     payment_alert.setView(mView);
                     payment_alert.setCancelable(true);
-                    CardView Cheque = (CardView) mView.findViewById(R.id.Payments_Check);
-                    CardView Cash = (CardView) mView.findViewById(R.id.Payments_Cash);
-                    CardView Credit = (CardView) mView.findViewById(R.id.Payments_Credit);
+                    Button Cheque = (Button) mView.findViewById(R.id.Payments_Check);
+                    Button Cash = (Button) mView.findViewById(R.id.Payments_Cash);
+                    Button Credit = (Button) mView.findViewById(R.id.Payments_Credit);
 
 
                     Cheque.setOnClickListener(new View.OnClickListener() {
@@ -582,14 +584,14 @@ public class MainActivity extends AppCompatActivity
 
                     String xml="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\"><properties><comment>Openbravo POS</comment><entry key=\"product.taxcategoryid\">"+mainAdp.items.get(x).getTAXCAT()+"</entry><entry key=\"product.com\">false</entry><entry key=\"product.categoryid\">"+mainAdp.items.get(x).getCATEGORY()+"</entry><entry key=\"product.name\">"+mainAdp.items.get(x).getNAME()+"</entry></properties>";
 
-                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"')";
+                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,-"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"')";
                     total+=Double.parseDouble(mainAdp.items.get(x).getPRICESELL())*mainAdp.items.get(x).getCantidad();
                 }else {
                     //cadena+="(@,"+x+",'"+MainStrMateriales.get(x).getID()+"',null,"+MainStrMateriales.get(x).getCantidad()+","+MainStrMateriales.get(x).getPRICESELL()+","+MainStrMateriales.get(x).getTAXCAT()+","+xml+"),";
 
                     String xml="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\"><properties><comment>Openbravo POS</comment><entry key=\"product.taxcategoryid\">"+mainAdp.items.get(x).getTAXCAT()+"</entry><entry key=\"product.com\">false</entry><entry key=\"product.categoryid\">"+mainAdp.items.get(x).getCATEGORY()+"</entry><entry key=\"product.name\">"+mainAdp.items.get(x).getNAME()+"</entry></properties>";
 
-                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"'),";
+                    cadena+="('@',"+x+",'"+mainAdp.items.get(x).getID()+"',null,-"+mainAdp.items.get(x).getCantidad()+","+mainAdp.items.get(x).getPRICESELL()+",'"+mainAdp.items.get(x).getTAXCAT()+"','"+xml+"'),";
                     total+=Double.parseDouble(mainAdp.items.get(x).getPRICESELL())*mainAdp.items.get(x).getCantidad();
                 }
             }
@@ -624,9 +626,9 @@ public class MainActivity extends AppCompatActivity
                             //Log.e("ok",response.body().getMensaje());
                             Log.e("receipt",response.body().getReceipt());
                             //String id, List<Product> details, Double subTotal, Double total, String client, String cashier
-                            Receipt receipt= new Receipt(response.body().getReceipt(),mainAdp.items,i.getTotal(),i.getTotal(),0.00,"",Configs.USER,response.body().getDate(),i.getTipopago(),Client_Name);
-                            receipt.setClient(Client_Name);
-                            Zebraprint zebraprint = new Zebraprint(MainActivity.this,receipt,Zebraprint.TAG_IMPRESION,MainActivity.this);
+                            mReceipt= new Receipt(response.body().getReceipt(),mainAdp.items,i.getTotal(),i.getTotal(),0.00,"",Configs.USER,response.body().getDate(),i.getTipopago(),Client_Name);
+                            mReceipt.setClient(Client_Name);
+                            Zebraprint zebraprint = new Zebraprint(MainActivity.this,mReceipt,Zebraprint.TAG_IMPRESION,MainActivity.this);
                             zebraprint.probarlo();
 //                            getIntent().putExtra("ID",ClienteID);
 //                            getIntent().putExtra("NAME",Client_Name);
@@ -684,12 +686,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void error(String msj) {
+    public void error(final String msj) {
         if(mPrinterProgress!=null)
             mPrinterProgress.dismiss();
 
-        Log.e("error printer",msj);
-        showAlert(msj);
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                // Stuff that updates the UI
+                Log.e("error printer",msj);
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+                alertDialogBuilder.setCancelable(false);
+                alertDialogBuilder.setMessage(msj);
+
+                alertDialogBuilder.setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Zebraprint zebraprint = new Zebraprint(MainActivity.this,mReceipt,Zebraprint.TAG_PAGO,MainActivity.this);
+                        zebraprint.probarlo();
+                    }
+                });
+
+                alertDialogBuilder.setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
+            }
+        });
     }
 
     @Override
